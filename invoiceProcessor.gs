@@ -1,4 +1,4 @@
-function markAsReadversionthree() {
+function invoiceProcessor() {
   var unreadEmails = GmailApp.search('is:unread');
   var dateObj = new Date();
   var month = String(dateObj.getMonth() + 1).padStart(2, '0'); // getMonth() is 0-based
@@ -7,7 +7,7 @@ function markAsReadversionthree() {
   var currentDate = month + '/' + day + '/' + year;
 
   // Access the Google Sheet
-  var sheet = SpreadsheetApp.openById('YOUR_SHEET_URL_ID_HERE').getSheetByName('YOUR_SHEET_NAME_HERE'); // https://docs.google.com/spreadsheets/d/YOUR_SHEET_URL_ID_HERE/edit#gid=0
+  var sheet = SpreadsheetApp.openById('1Dqa02unH306cnGKS-Yn5pvtn8qjM1Tm4NUkz63sRnAA').getSheetByName('Sheet1');
 
   for (var i = 0; i < unreadEmails.length; i++) {
     var messages = unreadEmails[i].getMessages();
