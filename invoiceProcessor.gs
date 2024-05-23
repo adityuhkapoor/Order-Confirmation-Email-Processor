@@ -11,7 +11,7 @@ function invoiceProcessor() {
 
   for (var i = 0; i < unreadEmails.length; i++) {
     var messages = unreadEmails[i].getMessages();
-    var pattern = /You Got Tickets To \b/;
+    var pattern = /You Got Tickets To\b|You Just Scored Tickets to\b/; // Updated pattern with "or"
 
     for (var j = 0; j < messages.length; j++) {
       var emailSubject = messages[j].getSubject();
@@ -22,9 +22,19 @@ function invoiceProcessor() {
         var bodyPlainText = messages[j].getBody();
         Logger.log(bodyPlainText);
         // Extract Ticket Name
-        var subjectPattern = /You Got Tickets To (.*)/;
-        var subjectMatch = emailSubject.match(subjectPattern);
-        var ticketDetail = subjectMatch ? subjectMatch[1] : "";
+        var ticketDetail = "";
+        var source = "Ticketmaster";
+        var subjectPattern1 = /You Got Tickets To (.*)/;
+        var subjectPattern2 = /You Just Scored Tickets to (.*)/;
+        var subjectMatch1 = emailSubject.match(subjectPattern1);
+        var subjectMatch2 = emailSubject.match(subjectPattern2);
+
+        if (subjectMatch1) {
+          ticketDetail = subjectMatch1[1];
+        } else if (subjectMatch2) {
+          ticketDetail = subjectMatch2[1];
+          source = "Live Nation";
+        }
 
         // Extract Buy Price
         var buyPricePattern = /\$([0-9]{1,3}(?:,[0-9]{3})*\.[0-9]{2})/;
@@ -75,7 +85,7 @@ function invoiceProcessor() {
         var paymentMethodDigits = paymentMethodDigitsMatch ? paymentMethodDigitsMatch[1].trim() : "";
 
         // Append the extracted data to the Google Sheet
-        sheet.appendRow([ticketDetail, formattedDate, venue, location, "Ticketmaster", buyPrice, orderNumber, currentDate, email, "", paymentMethod, "'"+paymentMethodDigits]);
+        sheet.appendRow([ticketDetail, formattedDate, venue, location, source, buyPrice, orderNumber, currentDate, email, "", paymentMethod, "'"+paymentMethodDigits]);
 
         // Get the last row number and apply the accounting format to the "buyPrice" in column F
         var lastRowNumber = sheet.getLastRow();
