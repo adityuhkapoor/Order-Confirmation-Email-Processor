@@ -7,7 +7,7 @@ function invoiceProcessor() {
   var currentDate = month + '/' + day + '/' + year;
 
   // Access the Google Sheet
-  var sheet = SpreadsheetApp.openById('1Dqa02unH306cnGKS-Yn5pvtn8qjM1Tm4NUkz63sRnAA').getSheetByName('Sheet1');
+  var sheet = SpreadsheetApp.openById('YOUR-SHEET-ID-HERE').getSheetByName('Sheet1');
 
   for (var i = 0; i < unreadEmails.length; i++) {
     var messages = unreadEmails[i].getMessages();
